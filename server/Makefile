@@ -1,14 +1,25 @@
-CC = $(CROSS_COMPILE)gcc
+CC ?= $(CROSS_COMPILE)gcc
 
-default:	server
+RM := rm -f
 
-all:	server
+BIN := aesdsocket
 
-server:	aesdsocket.o
-	$(CC) aesdsocket.o -o aesdsocket
+INCLUDES ?= ./inc
 
-aesdsocket.o: aesdsocket.c
-	$(CC) -c aesdsocket.c -o aesdsocket.o
+CFLAGS ?= -I $(INCLUDES) -g -Wall -Werror
+
+LDFLAGS ?= -lpthread -lrt
+
+SRC := $(wildcard ./src/*.c)
+OBJ := $(patsubst %.c, %.o, $(SRC))
+
+ALL: $(BIN)
+
+$(BIN): $(OBJ)
+	@$(CC) -o $(BIN) $(OBJ) $(CFLAGS)
 
 clean:
-	rm -f aesdsocket.o aesdsocket
+	@$(RM) $(OBJ) $(BIN)
+
+%o: %clean
+	$(CC) -c $< -o $@ $(CFLAGS)
