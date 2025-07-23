@@ -152,9 +152,9 @@ void *connection_routine(void *threadData)
     pthread_mutex_unlock(&fd_mutex);
     free(data);
 
-    pthread_mutex_lock(&fd_mutex);
+    // pthread_mutex_lock(&fd_mutex);
     fileData = read_file(fd);
-    pthread_mutex_unlock(&fd_mutex);
+    // pthread_mutex_unlock(&fd_mutex);
     if (!fileData){
         printf("%s: error in read_file().\n", __FUNCTION__);
         goto free_data;
